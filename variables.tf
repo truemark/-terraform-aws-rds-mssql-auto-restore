@@ -24,3 +24,14 @@ variable "secret_name" {
   description = "Name of the AWS secret containing the database connection information"
   type = string
 }
+
+variable "region_name" {
+  description = "Name of the AWS region where all services reside."
+  type = string
+  default = "us-east-2"
+}
+
+variable "tags" {
+  description = "Tags to be added to all resources."
+  type        = map(string)
+}
