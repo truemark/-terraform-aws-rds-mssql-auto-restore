@@ -26,8 +26,8 @@ DECLARE @ResultsVar TABLE
 INSERT  @ResultsVar
 EXEC msdb.dbo.rds_task_status;
 
-SELECT task_id, substring(s3_object_arn, charindex('/migration', s3_object_arn),100) as filename, pct_complete, duration_min, last_updated, lifecycle, task_type, db_name, s3_object_arn, created_at
+SELECT task_id, substring(s3_object_arn, charindex('/migration', s3_object_arn),100) as filename, pct_complete, duration_min, last_updated, lifecycle, task_type, task_info, db_name, s3_object_arn, created_at
 FROM @ResultsVar
--- WHERE lifecycle not in ('ERROR','CANCELLED')
-order by last_updated desc;
+WHERE last_updated > dateadd(hh,-2,GETDATE())
+ORDER BY filename DESC;
 
