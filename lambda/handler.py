@@ -63,9 +63,9 @@ def handler(event, context):
         logging.info(f"recovery file arn is {file_arn}")
         
         # Yank the recovery dbname from the file name.
-        # recovery_dbname = file_name.split("/")[2]
+        recovery_dbname = file_name.split("/")[2]
         # This is currently hard coded. Remove this when deploying. 
-        recovery_dbname = "zAdministration"
+        # recovery_dbname = "zAdministration"
     
         logging.info(f"Recovery target database is {recovery_dbname}. File is {file_arn}")
     
