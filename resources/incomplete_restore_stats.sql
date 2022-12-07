@@ -26,20 +26,13 @@ DECLARE @ResultsVar TABLE
 INSERT  @ResultsVar
 EXEC msdb.dbo.rds_task_status;
 
-SELECT db_name, lifecycle, task_id, substring(s3_object_arn, charindex('/migration', s3_object_arn),100) as filename, pct_complete, duration_min, last_updated, task_type, task_info, s3_object_arn, created_at
+SELECT db_name, lifecycle, count(*)
 FROM @ResultsVar
-WHERE 1=1
-and last_updated > dateadd(hh,-1,GETDATE())
--- and db_name = 'Administration'
--- and db_name = 'BusinessAnalysis'
--- and db_name = 'IPAddress'
--- and db_name = 'AffiliateDocuments'
--- and db_name = 'SharedPartner'
--- and db_name = 'SharedLTOperations'
+WHERE last_updated > dateadd(hh,-24,GETDATE())
 -- and db_name = 'Versioning'
-and db_name = 'LTLeadGenConfig'
--- and db_name = 'SharedLTInbound'
 and lifecycle <> 'CANCELLED'
-ORDER BY last_updated DESC;
--- order by task_id desc;
+-- AND pct_complete < 100
+group by db_name, lifecycle
+order by 1, 2;
+
 

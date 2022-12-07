@@ -26,20 +26,9 @@ DECLARE @ResultsVar TABLE
 INSERT  @ResultsVar
 EXEC msdb.dbo.rds_task_status;
 
-SELECT db_name, lifecycle, task_id, substring(s3_object_arn, charindex('/migration', s3_object_arn),100) as filename, pct_complete, duration_min, last_updated, task_type, task_info, s3_object_arn, created_at
-FROM @ResultsVar
-WHERE 1=1
-and last_updated > dateadd(hh,-1,GETDATE())
--- and db_name = 'Administration'
--- and db_name = 'BusinessAnalysis'
--- and db_name = 'IPAddress'
--- and db_name = 'AffiliateDocuments'
--- and db_name = 'SharedPartner'
--- and db_name = 'SharedLTOperations'
--- and db_name = 'Versioning'
-and db_name = 'LTLeadGenConfig'
--- and db_name = 'SharedLTInbound'
-and lifecycle <> 'CANCELLED'
-ORDER BY last_updated DESC;
--- order by task_id desc;
+SELECT v.db_name, v.lifecycle, v.task_id, substring(v.s3_object_arn, charindex('/migration', v.s3_object_arn),100) as filename, v.pct_complete, v.duration_min, v.last_updated, v.task_type, v.task_info, v.s3_object_arn, v.created_at
+FROM @ResultsVar v
+WHERE last_updated > dateadd(hh,-1,GETDATE())
+and task_id = (select max(task_id) from @ResultsVar where db_name = v.db_name)
+order by last_updated desc;
 
