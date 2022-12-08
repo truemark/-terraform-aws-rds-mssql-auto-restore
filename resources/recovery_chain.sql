@@ -28,10 +28,27 @@ EXEC msdb.dbo.rds_task_status;
 
 SELECT db_name, lifecycle, task_id, substring(s3_object_arn, charindex('/migration', s3_object_arn),100) as filename, pct_complete, duration_min, last_updated, task_type, task_info, s3_object_arn, created_at
 FROM @ResultsVar
-WHERE last_updated > dateadd(hh,-1,GETDATE())
--- and db_name = 'LTReporting_0_Eastern_A'
-and db_name = 'Administration'
-and lifecycle IN ( 'CREATED' , 'IN_PROGRESS','SUCCESS')
--- ORDER BY task_id ;
-ORDER BY filename ;
+WHERE 1=1 
+-- and last_updated > dateadd(hh,-24,GETDATE())
+-- and db_name = 'LTReporting_1_UTC_A' 
+-- and db_name = 'LTReporting_2_Mountain_A' 
+-- and db_name = 'LTReporting_3_Pacific_A' 
+-- and db_name = 'LTReporting_0_Eastern_A' 
+-- and db_name = 'Administration' 
+and db_name = 'Click_0_0_MarJunSepDec'
+-- and db_name = 'Click_0_1_JanAprJulOct'
+-- and db_name = 'Click_0_2_FebMayAugNov'
+-- and db_name = 'LTPaging_0'
+-- and db_name = 'LTPaging_1'
+-- and db_name = 'Versioning'
+-- and lifecycle <> 'ERROR'
+-- and lifecycle = 'SUCCESS'
+-- and lifecycle IN ( 'CREATED' , 'IN_PROGRESS','SUCCESS','CANCEL_REQUESTED')
+-- and (lifecycle = 'IN_PROGRESS'
+-- or lifecycle = 'CANCEL_REQUESTED')
+-- ORDER BY task_id DESC;
+-- ORDER BY filename DESC;
+-- and lifecycle = 'CREATED'
+order by last_updated desc;
+-- ORDER BY filename desc, lifecycle;
 
