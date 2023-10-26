@@ -1,3 +1,5 @@
+data "aws_caller_identity" "current" {}
+
 data "aws_sns_topic" "s3_notifications" {
   count = var.create ? 1 : 0
   name  = "537551041389-prod-data-archive-notifications"
