@@ -7,7 +7,7 @@ data "aws_sns_topic" "s3_notifications" {
 
 module "pyodbc_layer39" {
   source     = "truemark/lambda-pyodbc-layer39-mssql/aws"
-  version    = "1.1.0"
+  version    = "1.1.1"
   layer_name = "${var.name}-pyodbc-layer39"
   create = var.create
 }
